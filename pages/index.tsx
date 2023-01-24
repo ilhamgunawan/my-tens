@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
 import RepoCard from '@/components/RepoCard'
 import Pagination from '@/components/Pagination'
+import Info from '@/components/Info'
 import { GetServerSideProps } from 'next'
 import { useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '@/hooks'
@@ -34,12 +36,29 @@ export default function Home({ page }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="max-w-2xl m-auto p-2">
-        <div className="flex flex-col gap-3">
-          {state.data.map((repo) => 
-            <RepoCard key={repo.id} repo={repo} />
-          )}
-        </div>
+      <main className="max-w-2xl min-h-screen m-auto p-2">
+        {state.status === 'loading'
+          ? <div className="flex items-center justify-center p-5">
+              <img className="w-18 h-18" src='/spinner.svg' alt="Loading" />
+            </div>
+          : null
+        }
+        {state.status === 'success' && state.data.length > 0
+          ? <div className="flex flex-col gap-3">
+            {state.data.map((repo) => 
+              <RepoCard key={repo.id} repo={repo} />
+            )}
+            </div>
+          : null
+        }
+        {state.status === 'success' && state.data.length === 0
+          ? <Info message="No records found." />
+          : null
+        }
+        {state.status === 'failed'
+          ? <Info message="Something went wrong. Please refresh the page." />
+          : null
+        }
         <Pagination currentPage={page} />
       </main>
     </>
