@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import RepoCard from '@/components/RepoCard'
+import Pagination from '@/components/Pagination'
 import { GetServerSideProps } from 'next'
 import { useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '@/hooks'
@@ -39,6 +40,7 @@ export default function Home({ page }: Props) {
             <RepoCard key={repo.id} repo={repo} />
           )}
         </div>
+        <Pagination currentPage={page} />
       </main>
     </>
   )
