@@ -64,7 +64,7 @@ export default function Home({ page, username }: Props) {
           ? <Info message="Something went wrong. Please refresh the page." />
           : null
         }
-        <Pagination currentPage={page} />
+        <Pagination currentPage={page} username={username} />
       </main>
     </>
   )
