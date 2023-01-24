@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import RepoCard from '@/components/RepoCard'
 import { GetServerSideProps } from 'next'
 import { useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '@/hooks'
@@ -13,6 +14,7 @@ type Props = {
 
 export default function Home({ page }: Props) {
   const dispatch = useAppDispatch()
+  const state = useAppSelector(selectRepoState)
 
   useEffect(() => {
     dispatch(fetchStart())
@@ -31,8 +33,12 @@ export default function Home({ page }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1>Hello wordl!</h1>
+      <main className="max-w-2xl m-auto p-2">
+        <div className="flex flex-col gap-3">
+          {state.data.map((repo) => 
+            <RepoCard key={repo.id} repo={repo} />
+          )}
+        </div>
       </main>
     </>
   )
