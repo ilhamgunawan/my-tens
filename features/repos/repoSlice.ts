@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppState } from "@/store";
 import { RepoItem } from "@/lib/repo";
 
 export interface RepoState {
@@ -30,5 +31,7 @@ export const repoSlice = createSlice({
 })
 
 export const { fetchStart, fetchSucceed, fetchFailed } = repoSlice.actions
+
+export const selectRepoState = (state: AppState) => state.repo
 
 export default repoSlice.reducer
