@@ -1,7 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RepoItem } from "@/lib/repo";
 
 export interface RepoState {
-  data: any[]
+  data: RepoItem[]
   status: 'idle' | 'loading' | 'success' | 'failed'
 }
 
@@ -17,9 +18,9 @@ export const repoSlice = createSlice({
     fetchStart: (state) => {
       state.status = 'loading'
     },
-    fetchSucceed: (state, action) => {
+    fetchSucceed: (state, action: PayloadAction<RepoItem[]>) => {
       state.status = 'success'
-      // Todo: replace data with action payload
+      state.data = action.payload
     },
     fetchFailed: (state) => {
       state.status = 'failed'
