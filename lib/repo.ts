@@ -1,3 +1,6 @@
+import { Octokit } from "octokit";
+import { OctokitResponse } from '@octokit/types'
+
 export interface RepoItem {
   id: number
   name: string
@@ -20,17 +23,12 @@ export type FetchReposByUsernameRequest = {
   username: string
 }
 
-export async function fetchReposByUsername(request: FetchReposByUsernameRequest): Promise<RepoItem[]> {
-  const response = await fetch(`https://api.github.com/users/${request.username}/repos?page=${request.page}&per_page=10`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/vnd.github+json',
-      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
-  })
-  const result = await response.json()
+const octokit = new Octokit({ auth: process.env.NEXT_PUBLIC_TOKEN });
 
-  return result
+export type FetchReposResponse = RepoItem[]
+
+export async function fetchReposByUsername(request: FetchReposByUsernameRequest): Promise<OctokitResponse<FetchReposResponse, number>> {
+  return octokit.request(`GET /users/${request.username}/repos?page=${request.page}&per_page=10`, {
+    username: request.username
+  })
 }
