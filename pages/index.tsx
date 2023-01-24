@@ -3,19 +3,21 @@ import Head from 'next/head'
 import RepoCard from '@/components/RepoCard'
 import Pagination from '@/components/Pagination'
 import Info from '@/components/Info'
+import InputUsername from '@/components/InputUsername'
 import { GetServerSideProps } from 'next'
 import { useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '@/hooks'
 import { selectRepoState, fetchStart, fetchSucceed, fetchFailed } from '@/features/repos/repoSlice'
 import { fetchReposByUsername } from '@/lib/repo'
 
-const username = 'ilhamgunawan'
+const defaultUsername = 'ilhamgunawan'
 
 type Props = {
   page: number
+  username: string
 }
 
-export default function Home({ page }: Props) {
+export default function Home({ page, username }: Props) {
   const dispatch = useAppDispatch()
   const state = useAppSelector(selectRepoState)
 
@@ -26,7 +28,7 @@ export default function Home({ page }: Props) {
       .then(result => dispatch(fetchSucceed(result.data)))
       .catch(reason => dispatch(fetchFailed()))
 
-  }, [page])
+  }, [page, username])
 
   return (
     <>
@@ -37,6 +39,7 @@ export default function Home({ page }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="max-w-2xl min-h-screen m-auto p-2">
+        <InputUsername username={username} />
         {state.status === 'loading'
           ? <div className="flex items-center justify-center p-5">
               <img className="w-18 h-18" src='/spinner.svg' alt="Loading" />
@@ -67,10 +70,12 @@ export default function Home({ page }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const page = context.query.page as string ?? '1'
+  const username = context.query.username as string ?? defaultUsername
 
   return {
     props: {
-      page: parseInt(page)
+      page: parseInt(page),
+      username,
     }
   }
 }

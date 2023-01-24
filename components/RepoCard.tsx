@@ -9,7 +9,7 @@ type Props = {
 export default function RepoCard({ repo }: Props) {
   return (
     <div className="card card-side bg-base-100 shadow-md">
-      <figure className="py-8 pl-3">
+      <figure className="py-4 pl-3">
         <div className="avatar">
           <div className="w-12 h-12 rounded-full">
             <img src={repo.owner.avatar_url} alt={repo.owner.login} />
